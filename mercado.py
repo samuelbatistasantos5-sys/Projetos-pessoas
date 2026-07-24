@@ -6,6 +6,14 @@ def menu():
     print("="*30)
     print(f'{"Bem-Vindo ao Menu inicial":^30}')
     print("="*30)
+    sleep(1)
+    user = usuario()
+    os.system('cls')
+    if user == "Administrador":
+        pass
+    elif user == "Cliente":
+        menu_cliente()
+
 
 #Estoque
 def estoque():
@@ -18,6 +26,8 @@ def estoque():
 produto, quantidade, preco = estoque()
 
 def exibir_estoque(merc, quantidade, preco):
+    print("="*35)
+    print(f'{"Padaria Pedaço do céu":^35}')
     print("="*35)
     print(f"{'uni':<5}" + f"{'Produto':<20}" + f"{'Valor'}")
     print("="*35)
@@ -127,4 +137,5 @@ def pagamento(preco):
 
         else:
             print("Opção inválida")
-compra()
+
+menu()
