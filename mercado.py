@@ -57,7 +57,7 @@ def compra():
         while True:
             exibir_estoque(produto, quantidade, preco)
             mercadoria = input("Digite o nome do produto que deseja: \n->").capitalize()
-            disponivel, quantia = verificacao_produto(mercadoria)
+            disponivel, quantia, valor = verificacao_produto(mercadoria)
             if disponivel == True:
                 break
             else:
@@ -73,18 +73,25 @@ def compra():
             else:
                 print("Quantia inválida!")
 
+        sleep(1)
+        os.system('cls')
+        preco_final = valor_final(valor, unidades)
+        print(f"O valor do produto é R$ {valor}")
+        print(f"O valor final ficou R$ {preco_final:.2f}")
+        
+
 #verificar se tem
 def verificacao_produto(produto):
     mercadorias = estoque()[0]
     if produto in mercadorias:
         local = estoque()[0].index(produto)
         indice = estoque()[1][local]
+        preco = estoque()[2][local]
         verificacao = True
     else:
         indice = 0
         verificacao = False
-    print(indice)
-    return verificacao, indice
+    return verificacao, indice, preco
 
 #verificar quantidade
 def verificacao_quantidade(unidades, local):
@@ -93,20 +100,26 @@ def verificacao_quantidade(unidades, local):
     else:
         verificao = False
     return verificao
+
+#gerar valor final
+def valor_final(preco, quantidade):
+    preco_final = preco * quantidade
+    return preco_final 
+
     
 #calcular o pagamento
-def pagamento(a):
-    valor_final = a
+def pagamento(preco):
+    valor_final = preco
     while True:
         print("[1]Dinheiro \n[2]Débito \n[3]Cartão de crédito ")    
         opcao = int(input("->"))
         if opcao in [1,2,3]:
             match opcao:
                 case 1:
-                    desconto = a-(a*0.10)
+                    desconto = preco-(preco*0.10)
                     valor_final = desconto
                 case 2:
-                    desconto = a-(a*0.10)
+                    desconto = preco-(preco*0.10)
                     valor_final = desconto
                 case 3:
                     pass
@@ -114,6 +127,4 @@ def pagamento(a):
 
         else:
             print("Opção inválida")
-    return valor_final
-
 compra()
