@@ -85,9 +85,9 @@ def compra():
 
         sleep(1)
         os.system('cls')
-        preco_final = valor_final(valor, unidades)
         print(f"O valor do produto é R$ {valor}")
-        print(f"O valor final ficou R$ {preco_final:.2f}")
+        preco_final, desconto = pagamento(valor, unidades)
+        print(f"O valor final ficou com {desconto} R$ {preco_final:.2f}")
         
 
 #verificar se tem
@@ -99,6 +99,7 @@ def verificacao_produto(produto):
         preco = estoque()[2][local]
         verificacao = True
     else:
+        preco = 0
         indice = 0
         verificacao = False
     return verificacao, indice, preco
@@ -111,31 +112,33 @@ def verificacao_quantidade(unidades, local):
         verificao = False
     return verificao
 
-#gerar valor final
-def valor_final(preco, quantidade):
-    preco_final = preco * quantidade
-    return preco_final 
-
-    
 #calcular o pagamento
-def pagamento(preco):
-    valor_final = preco
+def pagamento(preco, quantidade):
+    valor_total_produto = preco * quantidade
     while True:
         print("[1]Dinheiro \n[2]Débito \n[3]Cartão de crédito ")    
         opcao = int(input("->"))
         if opcao in [1,2,3]:
             match opcao:
                 case 1:
-                    desconto = preco-(preco*0.10)
-                    valor_final = desconto
+                    preco_final = valor_total_produto-(valor_total_produto*0.10)
+                    desconto = "desconto de 10%"
                 case 2:
-                    desconto = preco-(preco*0.10)
-                    valor_final = desconto
+                    preco_final = valor_total_produto-(valor_total_produto*0.10)
+                    desconto = "desconto de 10%"
                 case 3:
+                    preco_final = valor_total_produto
                     pass
             break
-
         else:
             print("Opção inválida")
+    sn = ""
+    while sn not in "SN":
+        sn = input("Confimar pagamento? [S/N]").upper()
+        if sn == "S":
+            break
+        if sn == "N":
+            pass
+    return preco_final, desconto
 
-menu()
+compra()
