@@ -1,5 +1,6 @@
 import os
 from time import sleep
+from sys import exit
 
 #Menu
 def menu():
@@ -47,6 +48,7 @@ def usuario():
             user = "Administrador"
         case 3:
             user = ""
+            saida()
     return user
 
 #Menu para os clientes
@@ -59,7 +61,7 @@ def menu_cliente():
         case 1:
             compra()
         case 2:
-            pass
+            saida()
 
 #Área de compra para o cliente
 def compra():
@@ -85,7 +87,7 @@ def compra():
         os.system('cls')
         print(f"O valor do produto é R$ {valor}")
         preco_final, desconto = pagamento(valor, unidades)
-        print(f"O valor final ficou com {desconto} R$ {preco_final:.2f}")
+        print(f"O valor final ficou com {desconto}, ficou no total R$ {preco_final:.2f}")
         confimarpagamento = confimar_pagamento()
         if confimarpagamento == True:
             atualizar_o_estoque(local, unidades)
@@ -99,6 +101,7 @@ def verificacao_produto(nomedoproduto):
         valor = preco[local]
         verificacao = True
     else:
+        local = None
         valor = 0
         indice = 0
         verificacao = False
@@ -129,29 +132,55 @@ def pagamento(preco, quantidade):
                     desconto = "desconto de 10%"
                     break
                 case 3:
-                    preco_final = valor_total_produto
-                    pass
-                    break
+                    print("Deseja parcelar em quantas vezes: \n[1] A vista \n[2] x2 vezes \n[3] x3 vezes")
+                    parcelas = int(input("->"))
+                    match parcelas:
+                        case 1:
+                            preco_final = valor_total_produto
+                            desconto = "sem juros ou desconto"
+                            break
+                        case 2:
+                            preco_final = valor_total_produto+(valor_total_produto*0.05) 
+                            desconto = f"juros de 5%, duas parcelas de R$ {preco_final/2:.2f}"
+                            break
+                        case 3:
+                            preco_final = valor_total_produto+(valor_total_produto*0.10)
+                            desconto = f"juros de 10%, três parcelas de R$ {preco_final/3:.2f}"
+                            break
+                        case _:
+                            print("Opção inválida!!!")
+                            preco_final = None
+                            desconto = None
+                case _:
+                    print("Opção inválida!!!")
+                    preco_final = None
+                    desconto = None
         else:
             print("Opção inválida")
+
     return preco_final, desconto
 
 #confirmar pagamento
 def confimar_pagamento():
-    sn = " "
-    while sn not in "SN":
-        sn = input("Confimar pagamento? [S/N]").upper()
+    while True:
+        sn = input("Confimar pagamento? [S/N]").strip().upper()
         if sn == "S":
             print("Pagamento confirmado!!!")
-            pagamento_finalizado = True
-            break
+            return True
         elif sn == "N":
             print("Pagamento cancelado!!!")
-            pagamento_finalizado = False
-    return pagamento_finalizado
+            return False
+
+        print("Opção inválida!!!")
 
 #atualização de estoque caso o cliente compre, ou o adm altere a quantidade
 def atualizar_o_estoque(indice, quantia):
     if quantidade[indice] > 0:
         novo_valor = quantidade[indice] - quantia
         att = quantidade[indice] = novo_valor
+
+#Saída do sistema
+def saida():
+    print("Saindo...")
+    sleep(1.5)
+    exit()
