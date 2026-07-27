@@ -14,7 +14,6 @@ def menu():
     elif user == "Cliente":
         menu_cliente()
 
-
 #Estoque
 def estoque():
     mercadoria = ['Pão', 'Café', 'Biscoito', 'Açúcar', 'Leite']
@@ -67,7 +66,7 @@ def compra():
         while True:
             exibir_estoque(produto, quantidade, preco)
             mercadoria = input("Digite o nome do produto que deseja: \n->").capitalize()
-            disponivel, quantia, valor = verificacao_produto(mercadoria)
+            disponivel, quantia, valor, local = verificacao_produto(mercadoria)
             if disponivel == True:
                 break
             else:
@@ -82,27 +81,28 @@ def compra():
                 break
             else:
                 print("Quantia inválida!")
-
         sleep(1)
         os.system('cls')
         print(f"O valor do produto é R$ {valor}")
         preco_final, desconto = pagamento(valor, unidades)
         print(f"O valor final ficou com {desconto} R$ {preco_final:.2f}")
-        
+        confimarpagamento = confimar_pagamento()
+        if confimarpagamento == True:
+            atualizar_o_estoque(local, unidades)
 
 #verificar se tem
-def verificacao_produto(produto):
-    mercadorias = estoque()[0]
-    if produto in mercadorias:
-        local = estoque()[0].index(produto)
-        indice = estoque()[1][local]
-        preco = estoque()[2][local]
+def verificacao_produto(nomedoproduto):
+    mercadorias = produto
+    if nomedoproduto in mercadorias:
+        local = produto.index(nomedoproduto)
+        indice = quantidade[local]
+        valor = preco[local]
         verificacao = True
     else:
-        preco = 0
+        valor = 0
         indice = 0
         verificacao = False
-    return verificacao, indice, preco
+    return verificacao, indice, valor, local
 
 #verificar quantidade
 def verificacao_quantidade(unidades, local):
@@ -123,22 +123,35 @@ def pagamento(preco, quantidade):
                 case 1:
                     preco_final = valor_total_produto-(valor_total_produto*0.10)
                     desconto = "desconto de 10%"
+                    break
                 case 2:
                     preco_final = valor_total_produto-(valor_total_produto*0.10)
                     desconto = "desconto de 10%"
+                    break
                 case 3:
                     preco_final = valor_total_produto
                     pass
-            break
+                    break
         else:
             print("Opção inválida")
-    sn = ""
+    return preco_final, desconto
+
+#confirmar pagamento
+def confimar_pagamento():
+    sn = " "
     while sn not in "SN":
         sn = input("Confimar pagamento? [S/N]").upper()
         if sn == "S":
+            print("Pagamento confirmado!!!")
+            pagamento_finalizado = True
             break
-        if sn == "N":
-            pass
-    return preco_final, desconto
+        elif sn == "N":
+            print("Pagamento cancelado!!!")
+            pagamento_finalizado = False
+    return pagamento_finalizado
 
-compra()
+#atualização de estoque caso o cliente compre, ou o adm altere a quantidade
+def atualizar_o_estoque(indice, quantia):
+    if quantidade[indice] > 0:
+        novo_valor = quantidade[indice] - quantia
+        att = quantidade[indice] = novo_valor
