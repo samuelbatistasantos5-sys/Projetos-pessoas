@@ -184,3 +184,38 @@ def saida():
     print("Saindo...")
     sleep(1.5)
     exit()
+
+def menu_adm():
+    opcoes = int(input("Você deseja \n[1]Atualizar o estoque \n[2]Atualizar preço do produto \n[3]Relatório de compras \n[4]sair \n->"))
+    match opcoes:
+        case 1:
+            atualizar_estoque()
+        case 2:
+            print("Atualizar preço do produto")
+        case 3:
+            print("Relátorio de compras")
+        case 4:
+            saida()
+        case _:
+            print("Escolha inválida!!!")
+
+def atualizar_estoque():
+    exibir_estoque(produto, quantidade, preco)
+    while True:
+        mercadoria = input("Qual produto você quer atualizar o estoque: \n->")
+        unidades = int(input("Quer atualizar o estoque para quanto: "))
+        if mercadoria in produto:
+            for mercad in produto:
+                if mercadoria == mercad:
+                    indice = produto.index(mercad)
+                    print(indice, unidades)
+                    print("Certooooo!!!")
+                    atualizar_estoque(indice, unidades)
+                    exibir_estoque(produto, quantidade, preco)
+                    print("Novo estoque atualizado!!!")
+
+            break
+        else:
+            print("Produto não encontrado!!!")
+
+#Função Atualizar estoque estã errada!!!
