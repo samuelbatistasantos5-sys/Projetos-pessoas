@@ -78,8 +78,8 @@ def compra():
                 continue
         while True:
             unidades = int(input("Quantas unidades você quer? \n->"))
-            uni = verificacao_quantidade(unidades, quantia)
-            if uni == True:
+           
+            if verificacao_quantidade(unidades, quantia) == True:
                 break
             else:
                 print("Quantia inválida!")
@@ -90,7 +90,7 @@ def compra():
         print(f"O valor final ficou com {desconto}, ficou no total R$ {preco_final:.2f}")
         confimarpagamento = confimar_pagamento()
         if confimarpagamento == True:
-            atualizar_o_estoque(local, unidades)
+            atualizar_estoque_cliente(local, unidades)
 
 #verificar se tem
 def verificacao_produto(nomedoproduto):
@@ -174,10 +174,10 @@ def confimar_pagamento():
         print("Opção inválida!!!")
 
 #atualização de estoque caso o cliente compre, ou o adm altere a quantidade
-def atualizar_o_estoque(indice, quantia):
+def atualizar_estoque_cliente(indice, quantia):
     if quantidade[indice] > 0:
         novo_valor = quantidade[indice] - quantia
-        att = quantidade[indice] = novo_valor
+        quantidade[indice] = novo_valor
 
 #Saída do sistema
 def saida():
@@ -189,7 +189,7 @@ def menu_adm():
     opcoes = int(input("Você deseja \n[1]Atualizar o estoque \n[2]Atualizar preço do produto \n[3]Relatório de compras \n[4]sair \n->"))
     match opcoes:
         case 1:
-            atualizar_estoque()
+            atualizar_estoque_adm()
         case 2:
             print("Atualizar preço do produto")
         case 3:
@@ -199,23 +199,25 @@ def menu_adm():
         case _:
             print("Escolha inválida!!!")
 
-def atualizar_estoque():
+def atualizar_estoque_adm():
     exibir_estoque(produto, quantidade, preco)
     while True:
-        mercadoria = input("Qual produto você quer atualizar o estoque: \n->")
+        mercadoria = input("Qual produto você quer atualizar o estoque: \n->").strip().capitalize()
         unidades = int(input("Quer atualizar o estoque para quanto: "))
         if mercadoria in produto:
             for mercad in produto:
                 if mercadoria == mercad:
-                    indice = produto.index(mercad)
-                    print(indice, unidades)
+                    pos = produto.index(mercad)
+                    print(pos, unidades)
                     print("Certooooo!!!")
-                    atualizar_estoque(indice, unidades)
+                    if quantidade[pos] > 0:
+                        novo_valor = unidades
+                        quantidade[pos] = novo_valor
+                    else:
+                        pass
                     exibir_estoque(produto, quantidade, preco)
                     print("Novo estoque atualizado!!!")
 
             break
         else:
             print("Produto não encontrado!!!")
-
-#Função Atualizar estoque estã errada!!!
