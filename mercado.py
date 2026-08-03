@@ -11,7 +11,7 @@ def menu():
     user = usuario()
     os.system('cls')
     if user == "Administrador":
-        pass
+        menu_adm()
     elif user == "Cliente":
         menu_cliente()
 
@@ -91,6 +91,7 @@ def compra():
         confimarpagamento = confimar_pagamento()
         if confimarpagamento == True:
             atualizar_estoque_cliente(local, unidades)
+            relatorio(mercadoria, preco_final)
 
 #verificar se tem
 def verificacao_produto(nomedoproduto):
@@ -173,7 +174,16 @@ def confimar_pagamento():
 
         print("Opção inválida!!!")
 
-#atualização de estoque caso o cliente compre, ou o adm altere a quantidade
+relatorio_de_compras = []
+def relatorio(nome_do_produto, valor_do_produto):
+    listavazia = []
+    if nome_do_produto in produto:
+        listavazia.append(nome_do_produto)
+        listavazia.append(valor_do_produto)
+        relatorio_de_compras.append(listavazia[:])
+        listavazia.clear()
+
+#atualização de estoque caso o cliente compre
 def atualizar_estoque_cliente(indice, quantia):
     if quantidade[indice] > 0:
         novo_valor = quantidade[indice] - quantia
@@ -191,7 +201,7 @@ def menu_adm():
         case 1:
             atualizar_estoque_adm()
         case 2:
-            print("Atualizar preço do produto")
+            atualizar_preco_adm()
         case 3:
             print("Relátorio de compras")
         case 4:
@@ -203,13 +213,11 @@ def atualizar_estoque_adm():
     exibir_estoque(produto, quantidade, preco)
     while True:
         mercadoria = input("Qual produto você quer atualizar o estoque: \n->").strip().capitalize()
-        unidades = int(input("Quer atualizar o estoque para quanto: "))
         if mercadoria in produto:
+            unidades = int(input("Quer atualizar o estoque para quanto: "))
             for mercad in produto:
                 if mercadoria == mercad:
                     pos = produto.index(mercad)
-                    print(pos, unidades)
-                    print("Certooooo!!!")
                     if quantidade[pos] > 0:
                         novo_valor = unidades
                         quantidade[pos] = novo_valor
@@ -221,3 +229,39 @@ def atualizar_estoque_adm():
             break
         else:
             print("Produto não encontrado!!!")
+        
+
+def atualizar_preco_adm():
+    exibir_estoque(produto, quantidade, preco)
+    while True:
+        mercadoria = input("Qual produto você quer atualizar o preço: \n->").strip().capitalize()
+        if mercadoria in produto:
+            valor = float(input("Quer atualizar o preço para quanto: "))
+            for mercad in produto:
+                if mercadoria == mercad:
+                    pos = produto.index(mercad)
+                    print(pos, valor)
+                    print("Certooooo!!!")
+                    if quantidade[pos] > 0:
+                        novo_valor = valor
+                        preco[pos] = novo_valor
+                    else:
+                        pass
+                    exibir_estoque(produto, quantidade, preco)
+                    print("Novo preço atualizado!!!")
+
+            break
+        else:
+            print("Produto não encontrado!!!")
+
+def mostrar_estoque():
+    print(f"{"RELATÓRIO DE COMPRAS":.^40}")
+    print(f"{"Produto":<10}", f"{"Valor":>30}")
+    print("="*40)
+    for p in (relatorio_de_compras):
+        print(f'{f"{p[0]}":<10}', f'{f"R$ {p[1]:.2f}":>30}')
+
+
+while True:
+    compra()
+    mostrar_estoque()
