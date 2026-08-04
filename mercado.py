@@ -216,6 +216,39 @@ def menu_adm():
         case _:
             print("Escolha inválida!!!")
 
+#Sistema de entrada de adms
+def login():
+    while True:
+        print("Deseja: \n[1]Entrar como adm \n[2]Cadastrar novo adm \n[3]sair")
+        opcao = int(input("->"))     
+        match opcao:
+            case 1:
+                entrar_adm()
+            case 2:
+                pass
+            case 3:
+                saida()
+            case _:
+                print("Opção inválida")
+        break
+
+#lista que gurdar dados de usuários
+usuario_e_senha = [["Samuel", '04387319569', 1234]]
+
+def entrar_adm():
+    cpf = input("Digite seu CPF: ")
+    for p in usuario_e_senha:
+        if cpf == p[1]:
+            senha = int(input("Digite sua senha: "))
+            if senha == p[2]:
+                print(f"Bem-vindo {p[0]}")
+            else:
+                print("Senha inválida!")
+        else:
+            print("Usuário não cadastrado!")
+    input("Digite enter para prosseguir...")
+    limpar_tela()
+
 def atualizar_estoque_adm():
     exibir_estoque(produto, quantidade, preco)
     while True:
@@ -236,6 +269,8 @@ def atualizar_estoque_adm():
             break
         else:
             print("Produto não encontrado!!!")
+    input("Digite enter para prosseguir...")
+    limpar_tela()
         
 
 def atualizar_preco_adm():
@@ -260,6 +295,8 @@ def atualizar_preco_adm():
             break
         else:
             print("Produto não encontrado!!!")
+    input("Digite enter para prosseguir...")
+    limpar_tela()
 
 def mostrar_relatorio():
     print(f"{"RELATÓRIO DE COMPRAS":.^40}")
@@ -277,5 +314,6 @@ def mostrar_relatorio():
     input("Digite enter para prosseguir...")
     limpar_tela()
 
+
 while True:
-    menu()
+    login()
