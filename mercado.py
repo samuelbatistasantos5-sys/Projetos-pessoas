@@ -203,18 +203,19 @@ def saida():
     exit()
 
 def menu_adm():
-    opcoes = int(input("Você deseja \n[1]Atualizar o estoque \n[2]Atualizar preço do produto \n[3]Relatório de compras \n[4]sair \n->"))
-    match opcoes:
-        case 1:
-            atualizar_estoque_adm()
-        case 2:
-            atualizar_preco_adm()
-        case 3:
-            mostrar_relatorio()
-        case 4:
-            saida()
-        case _:
-            print("Escolha inválida!!!")
+    if login() == True:
+        opcoes = int(input("Você deseja \n[1]Atualizar o estoque \n[2]Atualizar preço do produto \n[3]Relatório de compras \n[4]sair \n->"))
+        match opcoes:
+            case 1:
+                atualizar_estoque_adm()
+            case 2:
+                atualizar_preco_adm()
+            case 3:
+                mostrar_relatorio()
+            case 4:
+                saida()
+            case _:
+                print("Escolha inválida!!!")
 
 #Sistema de entrada de adms
 def login():
@@ -223,14 +224,20 @@ def login():
         opcao = int(input("->"))     
         match opcao:
             case 1:
-                entrar_adm()
+                if entrar_adm() == True:
+                    acesso = True
             case 2:
-                pass
+                cadastrar_adm()
+                acesso = False
             case 3:
                 saida()
             case _:
                 print("Opção inválida")
+                acesso = False
         break
+    input("Digite enter para prosseguir...")
+    limpar_tela()
+    return acesso
 
 #lista que gurdar dados de usuários
 usuario_e_senha = [["Samuel", '04387319569', 1234]]
@@ -242,13 +249,46 @@ def entrar_adm():
             senha = int(input("Digite sua senha: "))
             if senha == p[2]:
                 print(f"Bem-vindo {p[0]}")
+                return True
             else:
                 print("Senha inválida!")
+                return False
         else:
             print("Usuário não cadastrado!")
+            return False
     input("Digite enter para prosseguir...")
     limpar_tela()
 
+def cadastrar_adm():
+    listavazia = []
+    while True:
+        cpf =  input("Digite seu CPF (somente números: )").strip()
+        if len(cpf) == 11:
+            for c in usuario_e_senha:
+                if cpf == c[1]:
+                    print("Cpf já cadastrado!")
+            else:
+                print("Cpf cadastrado!")
+                while True:
+                        senha = int(input("Digite sua senha: \n*Somente número \n*Quatro digitos \n->"))
+                        senha = str(senha)
+                        if len(senha) == 4:
+                            break
+                        else:
+                            print("Senha inválida!")
+                nome = input("como deseja ser chamado: ").strip().capitalize()
+            listavazia.append(nome)
+            listavazia.append(cpf)
+            listavazia.append(senha)
+            usuario_e_senha.append(listavazia[:])
+            listavazia.clear()
+            input("Digite enter para prosseguir...")
+            limpar_tela()
+            break
+        else:
+            print("CPF inválido!")
+
+#atualizar o estoque adm
 def atualizar_estoque_adm():
     exibir_estoque(produto, quantidade, preco)
     while True:
@@ -316,4 +356,5 @@ def mostrar_relatorio():
 
 
 while True:
-    login()
+    cadastrar_adm()
+    print(usuario_e_senha)
