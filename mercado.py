@@ -15,6 +15,9 @@ def menu():
     elif user == "Cliente":
         menu_cliente()
 
+#limpar tela
+def limpar_tela():
+    os.system('cls')
 #Estoque
 def estoque():
     mercadoria = ['Pão', 'Café', 'Biscoito', 'Açúcar', 'Leite']
@@ -56,7 +59,7 @@ def menu_cliente():
     escolha = 0
     while escolha not in (1,2,3):
             escolha = int(input("Você deseja \n[1]Comprar \n[2]sair \n->"))
-            os.system("cls")
+            limpar_tela()
     match escolha:
         case 1:
             compra()
@@ -74,7 +77,7 @@ def compra():
             else:
                 print("Produto não encontrado! Tente novamente")
                 sleep(1)
-                os.system("cls")
+                limpar_tela()
                 continue
         while True:
             unidades = int(input("Quantas unidades você quer? \n->"))
@@ -84,7 +87,7 @@ def compra():
             else:
                 print("Quantia inválida!")
         sleep(1)
-        os.system('cls')
+        limpar_tela()
         print(f"O valor do produto é R$ {valor}")
         preco_final, desconto = pagamento(valor, unidades)
         print(f"O valor final ficou com {desconto}, ficou no total R$ {preco_final:.2f}")
@@ -92,6 +95,8 @@ def compra():
         if confimarpagamento == True:
             atualizar_estoque_cliente(local, unidades)
             relatorio(mercadoria, preco_final, unidades)
+        input("Digite enter para prosseguir...")
+        limpar_tela()
 
 #verificar se tem
 def verificacao_produto(nomedoproduto):
@@ -159,7 +164,7 @@ def pagamento(preco, quantidade):
         else:
             print("Opção inválida")
     sleep(0.5)
-    os.system('cls')
+    limpar_tela()
     return preco_final, desconto
 
 #confirmar pagamento
@@ -269,6 +274,8 @@ def mostrar_relatorio():
     print("="*40)
     print(f"Produtos vendidos: {totalunidades}")
     print(f"Valor Total: R$ {totalpreco:.2f}")
+    input("Digite enter para prosseguir...")
+    limpar_tela()
 
 while True:
     menu()
