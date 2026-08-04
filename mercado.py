@@ -91,7 +91,7 @@ def compra():
         confimarpagamento = confimar_pagamento()
         if confimarpagamento == True:
             atualizar_estoque_cliente(local, unidades)
-            relatorio(mercadoria, preco_final)
+            relatorio(mercadoria, preco_final, unidades)
 
 #verificar se tem
 def verificacao_produto(nomedoproduto):
@@ -158,7 +158,8 @@ def pagamento(preco, quantidade):
                     desconto = None
         else:
             print("Opção inválida")
-
+    sleep(0.5)
+    os.system('cls')
     return preco_final, desconto
 
 #confirmar pagamento
@@ -175,11 +176,12 @@ def confimar_pagamento():
         print("Opção inválida!!!")
 
 relatorio_de_compras = []
-def relatorio(nome_do_produto, valor_do_produto):
+def relatorio(nome_do_produto, valor_do_produto,quantidade_de_produto):
     listavazia = []
     if nome_do_produto in produto:
         listavazia.append(nome_do_produto)
         listavazia.append(valor_do_produto)
+        listavazia.append(quantidade_de_produto)
         relatorio_de_compras.append(listavazia[:])
         listavazia.clear()
 
@@ -203,7 +205,7 @@ def menu_adm():
         case 2:
             atualizar_preco_adm()
         case 3:
-            print("Relátorio de compras")
+            mostrar_relatorio()
         case 4:
             saida()
         case _:
@@ -254,14 +256,19 @@ def atualizar_preco_adm():
         else:
             print("Produto não encontrado!!!")
 
-def mostrar_estoque():
+def mostrar_relatorio():
     print(f"{"RELATÓRIO DE COMPRAS":.^40}")
-    print(f"{"Produto":<10}", f"{"Valor":>30}")
+    print(f"{"Produto":<10}", f"{"Quantidade":>15}" f"{"Valor":>15}")
     print("="*40)
     for p in (relatorio_de_compras):
-        print(f'{f"{p[0]}":<10}', f'{f"R$ {p[1]:.2f}":>30}')
-
+        print(f'{f"{p[0]}":<10}', f"{f"{p[2]}":>10}" f'{f"R$ {p[1]:.2f}":>20}')
+    totalpreco = totalunidades = 0
+    for t in relatorio_de_compras:
+        totalpreco += (t[1])
+        totalunidades += (t[2])
+    print("="*40)
+    print(f"Produtos vendidos: {totalunidades}")
+    print(f"Valor Total: R$ {totalpreco:.2f}")
 
 while True:
-    compra()
-    mostrar_estoque()
+    menu()
