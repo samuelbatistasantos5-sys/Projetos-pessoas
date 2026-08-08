@@ -240,53 +240,49 @@ def login():
     return acesso
 
 #lista que gurdar dados de usuários
-usuario_e_senha = [["Samuel", '04387319569', 1234]]
+usuario_e_senha = [["Samuel", '04387319569', '1234']]
 
 def entrar_adm():
     cpf = input("Digite seu CPF: ")
-    for p in usuario_e_senha:
-        if cpf == p[1]:
-            senha = int(input("Digite sua senha: "))
-            if senha == p[2]:
-                print(f"Bem-vindo {p[0]}")
-                return True
-            else:
-                print("Senha inválida!")
-                return False
-        else:
-            print("Usuário não cadastrado!")
-            return False
+    if len(cpf) == 11:
+        for p in usuario_e_senha:
+            print(p)
+            if cpf == p[1]:
+                senha = input("Digite sua senha: ")
+                if senha == p[2]:
+                    print(f"Bem-vindo {p[0]}")
+                    return True
+                else:
+                    print("Senha inválida!")
+                    return False
+
+    print("Usuário não cadastrado!")
     input("Digite enter para prosseguir...")
     limpar_tela()
+    return False
 
 def cadastrar_adm():
     listavazia = []
     while True:
-        cpf =  input("Digite seu CPF (somente números: )").strip()
+        cpf =  input("Digite seu CPF (somente números:) \n->").strip()
         if len(cpf) == 11:
-            for c in usuario_e_senha:
-                if cpf == c[1]:
-                    print("Cpf já cadastrado!")
-            else:
-                print("Cpf cadastrado!")
-                while True:
-                        senha = int(input("Digite sua senha: \n*Somente número \n*Quatro digitos \n->"))
-                        senha = str(senha)
-                        if len(senha) == 4:
-                            break
-                        else:
-                            print("Senha inválida!")
-                nome = input("como deseja ser chamado: ").strip().capitalize()
-            listavazia.append(nome)
-            listavazia.append(cpf)
-            listavazia.append(senha)
-            usuario_e_senha.append(listavazia[:])
-            listavazia.clear()
-            input("Digite enter para prosseguir...")
-            limpar_tela()
             break
         else:
             print("CPF inválido!")
+    for c in usuario_e_senha:
+        if cpf == c[1]:
+            print("Cpf já cadastrado!")
+            return
+    while True:
+            senha = input("Digite sua senha: \n*Somente número \n*Quatro digitos \n->")
+            if len(senha) == 4 and senha.isdigit():
+                nome = input("como deseja ser chamado: ").strip().capitalize()
+                usuario_e_senha.append([nome, cpf, senha])
+                break
+            else:
+                print("Senha inválida!")
+    input("Digite enter para prosseguir...")
+    limpar_tela()
 
 #atualizar o estoque adm
 def atualizar_estoque_adm():
@@ -356,5 +352,4 @@ def mostrar_relatorio():
 
 
 while True:
-    cadastrar_adm()
-    print(usuario_e_senha)
+    menu()
