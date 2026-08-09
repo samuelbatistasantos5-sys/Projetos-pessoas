@@ -240,13 +240,12 @@ def login():
     return acesso
 
 #lista que gurdar dados de usuários
-usuario_e_senha = [["Samuel", '04387319569', '1234']]
+usuario_e_senha = [["Adm", '01234567890', '1234']]
 
 def entrar_adm():
     cpf = input("Digite seu CPF: ")
     if len(cpf) == 11:
         for p in usuario_e_senha:
-            print(p)
             if cpf == p[1]:
                 senha = input("Digite sua senha: ")
                 if senha == p[2]:
@@ -281,8 +280,6 @@ def cadastrar_adm():
                 break
             else:
                 print("Senha inválida!")
-    input("Digite enter para prosseguir...")
-    limpar_tela()
 
 #atualizar o estoque adm
 def atualizar_estoque_adm():
